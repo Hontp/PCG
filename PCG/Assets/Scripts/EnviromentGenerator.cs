@@ -10,6 +10,8 @@ public class EnviromentGenerator : MonoBehaviour
     [Header("Grid to Popluate")]
     public GameObject Grid;
 
+    [Header("Level DB")]
+    public Level levelDB;
 
     Vector2 tilePosition;
     Vector2 objectSpacing;
@@ -21,6 +23,7 @@ public class EnviromentGenerator : MonoBehaviour
         tilePosition.y = Grid.GetComponent<WorldGrid>().GridYPosition;
 
         objectSpacing = tiles[0].GetComponent<SpriteRenderer>().bounds.size;
+       
     }
 
     void Start()
@@ -30,20 +33,21 @@ public class EnviromentGenerator : MonoBehaviour
 
     public void Generate()
     {
-
+        int rand = 0;
+                
         for (int x = 0; x < Grid.GetComponent<WorldGrid>().GridWidth; x++)
         {
             for (int y = 0; y < Grid.GetComponent<WorldGrid>().GridHeight; y++)
             {
-                int rand = Random.Range(0, tiles.Length);
-
+                rand = Random.Range(0, tiles.Length);
+                              
                 Vector2 position = new Vector2(tilePosition.x + (x * objectSpacing.x), tilePosition.y + (y * objectSpacing.y));
 
                 instance = (GameObject)Instantiate(tiles[rand], position, Quaternion.identity);
 
                 instance.transform.SetParent(transform);
 
-                Grid.GetComponent<WorldGrid>().PopulateGrid(instance);
+                Grid.GetComponent<WorldGrid>().PopulateGrid(instance);               
             }
         }
     }
