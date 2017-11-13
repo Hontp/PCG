@@ -79,6 +79,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\DebugRand.cs" />
+    <Compile Include="Assets\InputManager.cs" />
+    <Compile Include="Assets\KeyBindDialog.cs" />
     <Compile Include="Assets\Movement.cs" />
     <Compile Include="Assets\Scripts\EnviromentGenerator.cs" />
     <Compile Include="Assets\Scripts\Level.cs" />
