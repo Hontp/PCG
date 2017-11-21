@@ -2,14 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public struct JoyButtons
+{
+    public string ButtonName;
+    public float Value; 
+}
 
 public class InputManager : MonoBehaviour
 {
     Dictionary<string, KeyCode> buttonKeys;
+    UnityInput rawController;
+
+    
 
     void OnEnable()
     {
+       
         buttonKeys = new Dictionary<string, KeyCode>();
+   
         buttonKeys["Up"] = KeyCode.UpArrow;
         buttonKeys["Down"] = KeyCode.DownArrow;
         buttonKeys["Left"] = KeyCode.LeftArrow;
@@ -19,8 +29,9 @@ public class InputManager : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
+        rawController = ScriptableObject.CreateInstance<UnityInput>();
     }
-	
+
     public bool GetButtonPressed(string buttonName)
     {
         if (buttonKeys.ContainsKey(buttonName) == false)
@@ -41,6 +52,31 @@ public class InputManager : MonoBehaviour
         }
 
         return Input.GetKey(buttonKeys[buttonName]);
+    }
+
+    public Vector3 GetThumbStickDirection()
+    {
+        if (rawController.ControllerAxis.x > 0)
+        {
+            return Vector3.right;
+        }
+
+        if (rawController.ControllerAxis.x < 0)
+        {
+            return Vector3.left;
+        }
+
+        if (rawController.ControllerAxis.y > 0)
+        {
+            return Vector3.up;
+        }
+
+        if (rawController.ControllerAxis.y < 0)
+        {
+            return Vector3.down;
+        }
+
+        return Vector3.zero;
     }
 
     public List<string> GetButtonsNames()
