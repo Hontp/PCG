@@ -10,48 +10,49 @@ public struct JoyButtons
 
 public class InputManager : MonoBehaviour
 {
-    Dictionary<string, KeyCode> buttonKeys;
     UnityInput rawController;
+    Dictionary<string, KeyCode> keys;
 
-    
+   public KeyData buttonKeys;
 
     void OnEnable()
     {
-       
-        buttonKeys = new Dictionary<string, KeyCode>();
-   
-        buttonKeys["Up"] = KeyCode.UpArrow;
-        buttonKeys["Down"] = KeyCode.DownArrow;
-        buttonKeys["Left"] = KeyCode.LeftArrow;
-        buttonKeys["Right"] = KeyCode.RightArrow;
-    }
-
-	// Use this for initialization
-	void Start ()
-    {
         rawController = ScriptableObject.CreateInstance<UnityInput>();
+
+        buttonKeys = ScriptableObject.CreateInstance<KeyData>();
+        buttonKeys = Resources.Load<KeyData>("Devices/keyboard");
+    } 
+    // Use this for initialization
+    void Start ()
+    {
+        keys = new Dictionary<string, KeyCode>();
+
+        for (int i = 0; i < buttonKeys.buttonKeys.Count; ++i)
+        {
+            keys.Add(buttonKeys.buttonKeys[i].Name, buttonKeys.buttonKeys[i].Code);
+        }
     }
 
     public bool GetButtonPressed(string buttonName)
     {
-        if (buttonKeys.ContainsKey(buttonName) == false)
+        if ( keys.ContainsKey(buttonName) == false)
         {
             Debug.Log("'" + buttonName + "'" + "does not exists");
             return false;
         }
 
-        return Input.GetKeyDown(buttonKeys[buttonName]);
+        return Input.GetKeyDown(keys[buttonName]);
     }
 
     public bool GetButtonDown(string buttonName)
     {
-        if (buttonKeys.ContainsKey(buttonName) == false)
+        if (keys.ContainsKey(buttonName) == false)
         {
             Debug.Log( "'" + buttonName + "'" + "does not exists");
             return false;
         }
 
-        return Input.GetKey(buttonKeys[buttonName]);
+        return Input.GetKey(keys[buttonName]);
     }
 
     public Vector3 GetThumbStickDirection()
@@ -81,22 +82,22 @@ public class InputManager : MonoBehaviour
 
     public List<string> GetButtonsNames()
     {
-        return buttonKeys.Keys.ToList();
+        return keys.Keys.ToList();
     }
 
     public string GetKeyNameFromButton(string buttonName )
     {
-        if (buttonKeys.ContainsKey(buttonName) == false)
+        if (keys.ContainsKey(buttonName) == false)
         {
             Debug.Log("'" + buttonName + "'" + "does not exists");
             return "_NO_KEY_";
         }
 
-        return buttonKeys[buttonName].ToString();
+        return keys[buttonName].ToString();
     }
 
     public void SetNewKey ( string buttonName, KeyCode keyCode)
     {
-        buttonKeys[buttonName] = keyCode;
+        keys[buttonName] = keyCode;
     }
 }
