@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class KeyBindDialog : MonoBehaviour
 {
-    InputManager inputManager;
+    [SerializeField] InputManager inputManager;
+
     public GameObject keyItemPrefab;
     public GameObject KeyList;
 
@@ -15,7 +16,7 @@ public class KeyBindDialog : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        inputManager = GameObject.FindObjectOfType<InputManager>();
+       // inputManager = GameObject.FindObjectOfType<InputManager>();
 
         List<string> buttonsNames = inputManager.GetButtonsNames();
         buttonLabel = new Dictionary<string, Text>();

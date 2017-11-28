@@ -5,7 +5,6 @@ public class Movement : MonoBehaviour
 {
 
     public float speed = 5.0f;
-    UnityInput rawInput;
 
     List<ControllerScheme> controls;
 

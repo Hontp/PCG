@@ -13,7 +13,7 @@ public class InputManager : MonoBehaviour
     UnityInput rawController;
     Dictionary<string, KeyCode> keys;
 
-   public KeyData buttonKeys;
+    KeyData buttonKeys;
 
     void OnEnable()
     {
