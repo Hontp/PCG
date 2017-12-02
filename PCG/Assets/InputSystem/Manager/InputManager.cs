@@ -13,23 +13,40 @@ public class InputManager : MonoBehaviour
     UnityInput rawController;
     Dictionary<string, KeyCode> keys;
 
-    KeyData buttonKeys;
+    KeyData data;
+    bool isLoaded = false;
 
     void OnEnable()
     {
-        rawController = ScriptableObject.CreateInstance<UnityInput>();
+        if (isLoaded == true)
+            return;
 
-        buttonKeys = ScriptableObject.CreateInstance<KeyData>();
-        buttonKeys = Resources.Load<KeyData>("Devices/keyboard");
-    } 
+        rawController = ScriptableObject.CreateInstance<UnityInput>();
+        data = ScriptableObject.CreateInstance<KeyData>();
+
+        string playerConfig = JsonHelper.LoadSaveData("player.cfg");
+
+        if (playerConfig != "none")
+        {
+            data.LoadConfig(playerConfig);
+
+            isLoaded = true;
+        }
+        else
+        {
+            data = Resources.Load<KeyData>("Devices/keyboard");
+
+            isLoaded = true;            
+        }
+    }
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         keys = new Dictionary<string, KeyCode>();
 
-        for (int i = 0; i < buttonKeys.buttonKeys.Count; ++i)
+        for (int i = 0; i < data.buttonKeys.Count; ++i)
         {
-            keys.Add(buttonKeys.buttonKeys[i].Name, buttonKeys.buttonKeys[i].Code);
+            keys.Add(data.buttonKeys[i].Name, data.buttonKeys[i].Code);
         }
     }
 
@@ -85,6 +102,11 @@ public class InputManager : MonoBehaviour
         return keys.Keys.ToList();
     }
 
+    public void SavePlayerSettings()
+    {
+       JsonHelper.WriteSaveData("player.cfg" ,data.SaveKeyData());
+    }
+
     public string GetKeyNameFromButton(string buttonName )
     {
         if (keys.ContainsKey(buttonName) == false)
@@ -99,5 +121,13 @@ public class InputManager : MonoBehaviour
     public void SetNewKey ( string buttonName, KeyCode keyCode)
     {
         keys[buttonName] = keyCode;
+        
+        for (int i =0; i < data.buttonKeys.Count; ++i)
+        {
+            if (data.buttonKeys[i].Name == buttonName)
+            {
+                data.buttonKeys[i].Code = keyCode;
+            }
+        }       
     }
 }

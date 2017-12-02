@@ -21,5 +21,15 @@ public class KeyData : ScriptableObject
                 break;
             }
         }
-    } 
+    }
+
+    public void LoadConfig(string json)
+    {
+        JsonUtility.FromJsonOverwrite(json, this);
+    }
+
+    public string SaveKeyData()
+    {
+        return JsonUtility.ToJson(this, true);
+    }
 }

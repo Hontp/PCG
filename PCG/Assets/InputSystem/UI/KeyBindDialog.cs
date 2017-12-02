@@ -16,7 +16,6 @@ public class KeyBindDialog : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-       // inputManager = GameObject.FindObjectOfType<InputManager>();
 
         List<string> buttonsNames = inputManager.GetButtonsNames();
         buttonLabel = new Dictionary<string, Text>();

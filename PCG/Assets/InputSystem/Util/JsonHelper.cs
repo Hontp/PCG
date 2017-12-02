@@ -1,39 +1,38 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 
 public static class JsonHelper
 {
-    [Serializable]
-    private class Wrapper<T>
+
+    public static void WriteSaveData(string fileName, string jsonData)
     {
-        public T[] Items;
+        string fullPath = Path.Combine(Application.dataPath, fileName);
+
+        using (StreamWriter sw = new StreamWriter(fullPath))
+        {
+            sw.WriteLine(jsonData);
+        }    
     }
 
-    public static T[] FromJson<T>(string json)
+    public static string LoadSaveData(string fileName)
     {
-        Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(json);
+        string fullPath = Path.Combine(Application.dataPath, fileName);
+        string result;
 
-        return wrapper.Items;
+        if (!File.Exists(fullPath))
+        {
+            result = "none";
+            return result;
+        }
+
+        using (StreamReader sr = new StreamReader(fullPath))
+        {
+           result = sr.ReadToEnd();
+        }
+
+        return result;
     }
-
-    public static string ToJson<T>(T[] array)
-    {
-        Wrapper<T> wrapper = new Wrapper<T>();
-        wrapper.Items = array;
-
-        return JsonUtility.ToJson(wrapper);
-    }
-
-    public static string ToJson<T>(T[] array, bool prettyPrint)
-    {
-        Wrapper<T> wrapper = new Wrapper<T>();
-        wrapper.Items = array;
-
-        return JsonUtility.ToJson(wrapper, prettyPrint);
-    }
-
-
-
 
 }
